@@ -27,6 +27,12 @@
             <version>1.4</version>
         </dependency>
         <dependency>
+            <groupId>org.kie.modules</groupId>
+            <artifactId>org-jsoup</artifactId>
+            <version>6.4.0.CR2</version>
+            <classifier>tests</classifier>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>

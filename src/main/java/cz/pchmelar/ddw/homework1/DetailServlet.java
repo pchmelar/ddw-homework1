@@ -5,28 +5,23 @@
  */
 package cz.pchmelar.ddw.homework1;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import org.apache.commons.io.IOUtils;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 /**
  *
  * @author filletzz
  */
-@WebServlet(name = "MainServlet", urlPatterns = {"/MainServlet"})
-public class MainServlet extends HttpServlet {
+@WebServlet(name = "DetailServlet", urlPatterns = {"/DetailServlet"})
+public class DetailServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,7 +34,11 @@ public class MainServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
+        //get params
+        String season = java.net.URLDecoder.decode(request.getParameter("season"), "UTF-8");
+        String episode = java.net.URLDecoder.decode(request.getParameter("episode"), "UTF-8");
+        
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
@@ -60,36 +59,16 @@ public class MainServlet extends HttpServlet {
             out.println("<a href=\"/ddw-homework1/MainServlet\"><img src=\"http://www.returndates.com/backgrounds/simpsons.logo.png\" class=\"img-responsive center-block\"></a>");
             out.println("<br>");
             out.println("<br>");
-
-            //GET JSON of all simpsons episodes
-            String urlString = "http://api.tvmaze.com/singlesearch/shows?q=simpsons&embed=episodes";
-            URL url = new URL(urlString);
-            URLConnection conn = url.openConnection();
-            InputStream is = conn.getInputStream();
-            String JSON = IOUtils.toString(is, "UTF-8");
-
-            //print season/episode/name for every episode in JSON
-            JsonElement jelement = new JsonParser().parse(JSON);
-            JsonObject jobject = jelement.getAsJsonObject();
-            jobject = jobject.getAsJsonObject("_embedded");
-            JsonArray jarray = jobject.getAsJsonArray("episodes");
-            out.println("<table class=\"table table-bordered table-hover\" style=\"background-color: #FFFFFF\">");
-            out.println("<thead><tr><th>Season</th><th>Episode</th><th>Name</th></tr></thead><tbody>");
-            for (int i = 0; i < jarray.size(); i++){
-                
-                jobject = jarray.get(i).getAsJsonObject();
-                String season = jobject.get("season").toString();
-                if (season.length() == 1) season = "0" + season;
-                String episode = jobject.get("number").toString();
-                if (episode.length() == 1) episode = "0" + episode;
-                
-                out.println("<tr>");
-                out.println("<td>" + season + "</td>");
-                out.println("<td>" + episode + "</td>");
-                out.println("<td><a href=\"/ddw-homework1/DetailServlet?season=" + season + "&episode=" + episode + "\">" + jobject.get("name").toString() + "</a></td>");
-                out.println("</tr>");
-            }
-            out.println("</tbody></table>");
+            
+            //GET script of selected episode (jsoup)
+            String urlString = "http://www.springfieldspringfield.co.uk/view_episode_scripts.php?tv-show=the-simpsons&episode=s" + season + "e" + episode;
+            Document document = Jsoup.connect(urlString).get();
+            Elements script = document.select("div.scrolling-script-container");
+            String content = script.html().replaceAll("<br> ?", "");
+                    
+            out.println("<h2>Script of episode " + season + "/" + episode + " :</h2>");
+            out.println("<textarea class=\"form-control\" rows=\"12\" style=\"resize: none;\">" + content + "</textarea>");
+            
             out.println("</container>");
 
             out.println("</body>");
