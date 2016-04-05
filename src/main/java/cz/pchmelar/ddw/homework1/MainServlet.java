@@ -5,8 +5,16 @@
  */
 package cz.pchmelar.ddw.homework1;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
+import org.apache.commons.io.IOUtils;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,16 +39,43 @@ public class MainServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MainServlet</title>");            
+            out.println("<title>Servlet MainServlet</title>");
             out.println("</head>");
             out.println("<body>");
+
+            //GET request
+            String urlString = "http://api.tvmaze.com/singlesearch/shows?q=simpsons&embed=episodes";
+            URL url = new URL(urlString);
+            URLConnection conn = url.openConnection();
+            InputStream is = conn.getInputStream();
+            String JSON = IOUtils.toString(is, "UTF-8");
+
+            //print season/episode/name for every episode in JSON
+            JsonElement jelement = new JsonParser().parse(JSON);
+            JsonObject jobject = jelement.getAsJsonObject();
+            jobject = jobject.getAsJsonObject("_embedded");
+            JsonArray jarray = jobject.getAsJsonArray("episodes");
+            out.println("<table border=\"1\">");
+            for (int i = 0; i < jarray.size(); i++){
+                out.println("<tr>");
+                jobject = jarray.get(i).getAsJsonObject();
+                out.println("<td>" + jobject.get("season").toString() + "</td>");
+                out.println("<td>" + jobject.get("number").toString() + "</td>");
+                out.println("<td>" + jobject.get("name").toString() + "</td>");
+                out.println("</tr>");
+            }
+            out.println("</table>");
+
             out.println("<h1>Servlet MainServlet at " + request.getContextPath() + "</h1>");
+
             out.println("</body>");
             out.println("</html>");
         }
