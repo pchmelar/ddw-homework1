@@ -38,6 +38,11 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>uk.ac.gate</groupId>
+            <artifactId>gate-core</artifactId>
+            <version>8.1</version>
+        </dependency>
     </dependencies>
 
     <build>

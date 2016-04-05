@@ -57,7 +57,7 @@ public class MainServlet extends HttpServlet {
             out.println("<div class=\"container\">");
             out.println("<br>");
             out.println("<br>");
-            out.println("<a href=\"/ddw-homework1/MainServlet\"><img src=\"http://www.returndates.com/backgrounds/simpsons.logo.png\" class=\"img-responsive center-block\"></a>");
+            out.println("<a href=\"/ddw-homework1/MainServlet\"><img src=\"http://www.returndates.com/backgrounds/simpsons.logo.png\" class=\"img-responsive center-block\" style=\"width: 50%; height: 50%\"></a>");
             out.println("<br>");
             out.println("<br>");
 
