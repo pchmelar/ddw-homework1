@@ -48,8 +48,18 @@ public class MainServlet extends HttpServlet {
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet MainServlet</title>");
+            out.println("<link rel=\"stylesheet\" href=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\">");
+            out.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js\"></script>");
+            out.println("<script src=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js\"></script>");
             out.println("</head>");
-            out.println("<body>");
+            out.println("<body style=\"background-color: #A0D1F5\">");
+            
+            out.println("<div class=\"container\">");
+            out.println("<br>");
+            out.println("<br>");
+            out.println("<img src=\"http://www.returndates.com/backgrounds/simpsons.logo.png\" class=\"img-responsive center-block\">");
+            out.println("<br>");
+            out.println("<br>");
 
             //GET request
             String urlString = "http://api.tvmaze.com/singlesearch/shows?q=simpsons&embed=episodes";
@@ -63,7 +73,8 @@ public class MainServlet extends HttpServlet {
             JsonObject jobject = jelement.getAsJsonObject();
             jobject = jobject.getAsJsonObject("_embedded");
             JsonArray jarray = jobject.getAsJsonArray("episodes");
-            out.println("<table border=\"1\">");
+            out.println("<table class=\"table table-bordered table-hover\" style=\"background-color: #FFFFFF\">");
+            out.println("<thead><tr><th>Season</th><th>Episode</th><th>Name</th></tr></thead><tbody>");
             for (int i = 0; i < jarray.size(); i++){
                 out.println("<tr>");
                 jobject = jarray.get(i).getAsJsonObject();
@@ -72,9 +83,8 @@ public class MainServlet extends HttpServlet {
                 out.println("<td>" + jobject.get("name").toString() + "</td>");
                 out.println("</tr>");
             }
-            out.println("</table>");
-
-            out.println("<h1>Servlet MainServlet at " + request.getContextPath() + "</h1>");
+            out.println("</tbody></table>");
+            out.println("</container>");
 
             out.println("</body>");
             out.println("</html>");
