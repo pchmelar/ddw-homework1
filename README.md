@@ -12,3 +12,4 @@ Sentiment analyzer of The Simpsons episodes
 
 ![alt text](screenshots/main.png "Main")
 ![alt text](screenshots/detail.png "Detail")
+![alt text](screenshots/graph.png "Graph")
