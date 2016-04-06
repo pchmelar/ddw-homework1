@@ -129,7 +129,7 @@ public class DetailServlet extends HttpServlet {
             }
             try {
                 // locate the JAPE grammar file
-                File japeOrigFile = new File("/Users/filletzz/Documents/!School_CVUT/Semestr10/[MI-DDW]/cv02/sentiment.jape");
+                File japeOrigFile = new File("/Applications/GATE_Developer_8.1/jape/sentiment.jape");
                 java.net.URI japeURI = japeOrigFile.toURI();
 
                 // create feature map for the JAPE transducer
